@@ -4,8 +4,11 @@
 
 @layer base {
   body {
-    @apply bg-black text-text-secondary;
-    font-family: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
+    @apply bg-bg-primary text-text-secondary antialiased relative;
+    background: radial-gradient(140% 80% at 20% 10%, rgba(141, 249, 209, 0.06), transparent),
+                radial-gradient(120% 70% at 80% 0%, rgba(115, 210, 255, 0.08), transparent),
+                linear-gradient(180deg, #050A16 0%, #0B1324 40%, #050A16 100%);
+    color-scheme: dark;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -15,21 +18,25 @@
 
 @layer components {
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-gold-light via-accent-mint to-accent-sky bg-clip-text text-transparent;
   }
 
   .glass-card {
-    @apply bg-bg-secondary/80 backdrop-blur-md border border-gold/30 rounded-2xl;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.45)];
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-gold-light to-gold text-black font-semibold px-8 py-4 rounded-lg 
-           transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(212,175,55,0.5)];
+    @apply bg-gradient-to-r from-accent-mint to-accent-sky text-black font-semibold px-7 py-4 rounded-full 
+           transition-all duration-300 shadow-[0_15px_45px_rgba(115,210,255,0.25)] hover:shadow-[0_20px_60px_rgba(141,249,209,0.35)] hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-    @apply border-2 border-gold text-gold font-semibold px-8 py-4 rounded-lg
-           transition-all duration-300 hover:bg-gold/10;
+    @apply border border-white/30 text-text-primary font-semibold px-7 py-4 rounded-full
+           transition-all duration-300 hover:border-accent-mint hover:text-white hover:-translate-y-0.5;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-white/5 border border-white/10;
   }
 }
 

@@ -9,38 +9,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Background colors
-        'bg-primary': '#000000',
-        'bg-secondary': '#1A1A1A',
-        'bg-tertiary': '#2D2D2D',
-        
-        // Gold colors
-        'gold': {
-          light: '#F4E4C1',
-          DEFAULT: '#D4AF37',
-          medium: '#D4AF37',
-          dark: '#C9A961',
-          bronze: '#8B7355',
+        'bg-primary': '#050A16',
+        'bg-secondary': '#0B1324',
+        'bg-tertiary': '#0F1C36',
+        'panel': '#0F1A30',
+        'outline': '#1E2B48',
+
+        gold: {
+          light: '#FCE6B1',
+          DEFAULT: '#F7D46D',
+          medium: '#E3B85E',
+          dark: '#D59A4E',
+          bronze: '#8C6B3F',
         },
-        
-        // Text colors
-        'text-primary': '#FFFFFF',
-        'text-secondary': '#F5F5DC',
-        'text-muted': '#A0A0A0',
+
+        'accent-mint': '#8DF9D1',
+        'accent-sky': '#73D2FF',
+        'accent-iris': '#8DA0FF',
+
+        'text-primary': '#E8EEFF',
+        'text-secondary': '#A4B5D6',
+        'text-muted': '#6E7A99',
       },
       backgroundImage: {
-        'gradient-gold': 'linear-gradient(135deg, #F4E4C1 0%, #D4AF37 50%, #C9A961 100%)',
-        'gradient-partner': 'linear-gradient(90deg, #4A4A4A 0%, #3A3A3A 100%)',
-        'gradient-sapphire': 'linear-gradient(90deg, #4A5D6B 0%, #5A7D8B 100%)',
-        'gradient-ruby': 'linear-gradient(90deg, #6B4A4A 0%, #8B5A5A 100%)',
-        'gradient-emerald': 'linear-gradient(90deg, #4A6B4A 0%, #5A8B5A 100%)',
-        'gradient-diamond': 'linear-gradient(90deg, #6B6B4A 0%, #8B8B5A 100%)',
-        'gradient-royal': 'linear-gradient(90deg, #D4AF37 0%, #F4E4C1 100%)',
-        'gradient-imperial': 'linear-gradient(90deg, #F4D03F 0%, #FFE66D 100%)',
+        'gradient-gold': 'linear-gradient(120deg, #FCE6B1 0%, #F7D46D 35%, #8DF9D1 100%)',
+        'gradient-mint': 'linear-gradient(120deg, #73D2FF 0%, #8DF9D1 50%, #F7D46D 100%)',
+        'gradient-iris': 'linear-gradient(160deg, #0B1324 0%, #141F3A 50%, #0B1324 100%)',
+        'grid-fine': 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)',
       },
       fontFamily: {
-        sans: ['Inter', 'SF Pro Display', '-apple-system', 'sans-serif'],
-        display: ['Montserrat', 'Inter', 'sans-serif'],
+        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-body)', 'sans-serif'],
       },
       fontSize: {
         'hero': '72px',
