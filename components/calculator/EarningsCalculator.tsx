@@ -4,6 +4,15 @@ import React, { useState } from "react";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
+interface IncomeLine {
+  label: string;
+  sublabel?: string;
+  myPercent: number;
+  theirPercent?: number;
+  amount: number;
+  color: string;
+}
+
 interface Level {
   name: string;
   percent: number;
@@ -12,9 +21,7 @@ interface Level {
   networkSize: number;
   action: string;
   color: string;
-  personal: number;
-  team: number;
-  rankBonus: number;
+  lines: IncomeLine[];
 }
 
 const LEVELS: Level[] = [
@@ -24,11 +31,11 @@ const LEVELS: Level[] = [
     gv: 5_000,
     totalCheck: 1_950,
     networkSize: 4,
-    action: "4 регистрации на $1 000 + ББС",
+    action: "4 регистрации × $1 000 + ББС",
     color: "#A4B5D6",
-    personal: 1_950,
-    team: 0,
-    rankBonus: 0,
+    lines: [
+      { label: "Личные продажи + ББС", sublabel: "4 реги × $1 000", myPercent: 20, amount: 1_950, color: "#8DF9D1" },
+    ],
   },
   {
     name: "Gold",
@@ -38,9 +45,11 @@ const LEVELS: Level[] = [
     networkSize: 16,
     action: "1-я линия по 4 регистрации",
     color: "#F7D46D",
-    personal: 250,
-    team: 750,
-    rankBonus: 100,
+    lines: [
+      { label: "Личные продажи", sublabel: "25% от оборота", myPercent: 25, amount: 250, color: "#8DF9D1" },
+      { label: "1-я линия", sublabel: "Partner (20%)", myPercent: 25, theirPercent: 20, amount: 750, color: "#73D2FF" },
+      { label: "Ранговый бонус", sublabel: "за Gold", myPercent: 0, amount: 100, color: "#F7D46D" },
+    ],
   },
   {
     name: "Sapphire",
@@ -50,9 +59,12 @@ const LEVELS: Level[] = [
     networkSize: 64,
     action: "2-я линия по 4 регистрации",
     color: "#73D2FF",
-    personal: 300,
-    team: 5_600,
-    rankBonus: 500,
+    lines: [
+      { label: "Личные продажи", sublabel: "30% от оборота", myPercent: 30, amount: 300, color: "#8DF9D1" },
+      { label: "1-я линия", sublabel: "Gold (25%)", myPercent: 30, theirPercent: 25, amount: 2_100, color: "#73D2FF" },
+      { label: "2-я линия", sublabel: "Partner (20%)", myPercent: 30, theirPercent: 20, amount: 3_500, color: "#8DA0FF" },
+      { label: "Ранговый бонус", sublabel: "за Sapphire", myPercent: 0, amount: 500, color: "#F7D46D" },
+    ],
   },
   {
     name: "Ruby",
@@ -62,9 +74,13 @@ const LEVELS: Level[] = [
     networkSize: 256,
     action: "3-я линия по 4 регистрации",
     color: "#FF6B8A",
-    personal: 350,
-    team: 17_350,
-    rankBonus: 1_000,
+    lines: [
+      { label: "Личные продажи", sublabel: "35% от оборота", myPercent: 35, amount: 350, color: "#8DF9D1" },
+      { label: "1-я линия", sublabel: "Sapphire (30%)", myPercent: 35, theirPercent: 30, amount: 3_200, color: "#73D2FF" },
+      { label: "2-я линия", sublabel: "Gold (25%)", myPercent: 35, theirPercent: 25, amount: 6_400, color: "#8DA0FF" },
+      { label: "3-я линия", sublabel: "Partner (20%)", myPercent: 35, theirPercent: 20, amount: 7_750, color: "#C4A0FF" },
+      { label: "Ранговый бонус", sublabel: "за Ruby", myPercent: 0, amount: 1_000, color: "#F7D46D" },
+    ],
   },
   {
     name: "Emerald",
@@ -74,9 +90,14 @@ const LEVELS: Level[] = [
     networkSize: 1_024,
     action: "4-я линия по 4 регистрации",
     color: "#8DF9D1",
-    personal: 400,
-    team: 50_700,
-    rankBonus: 2_500,
+    lines: [
+      { label: "Личные продажи", sublabel: "40% от оборота", myPercent: 40, amount: 400, color: "#8DF9D1" },
+      { label: "1-я линия", sublabel: "Ruby (35%)", myPercent: 40, theirPercent: 35, amount: 7_200, color: "#73D2FF" },
+      { label: "2-я линия", sublabel: "Sapphire (30%)", myPercent: 40, theirPercent: 30, amount: 14_200, color: "#8DA0FF" },
+      { label: "3-я линия", sublabel: "Gold (25%)", myPercent: 40, theirPercent: 25, amount: 16_100, color: "#C4A0FF" },
+      { label: "4-я линия", sublabel: "Partner (20%)", myPercent: 40, theirPercent: 20, amount: 13_200, color: "#FF6B8A" },
+      { label: "Ранговый бонус", sublabel: "за Emerald", myPercent: 0, amount: 2_500, color: "#F7D46D" },
+    ],
   },
   {
     name: "Diamond",
@@ -86,9 +107,15 @@ const LEVELS: Level[] = [
     networkSize: 4_096,
     action: "5-я линия по 4 регистрации",
     color: "#B8F2FF",
-    personal: 450,
-    team: 198_950,
-    rankBonus: 5_000,
+    lines: [
+      { label: "Личные продажи", sublabel: "45% от оборота", myPercent: 45, amount: 450, color: "#8DF9D1" },
+      { label: "1-я линия", sublabel: "Emerald (40%)", myPercent: 45, theirPercent: 40, amount: 24_200, color: "#73D2FF" },
+      { label: "2-я линия", sublabel: "Ruby (35%)", myPercent: 45, theirPercent: 35, amount: 48_800, color: "#8DA0FF" },
+      { label: "3-я линия", sublabel: "Sapphire (30%)", myPercent: 45, theirPercent: 30, amount: 52_800, color: "#C4A0FF" },
+      { label: "4-я линия", sublabel: "Gold (25%)", myPercent: 45, theirPercent: 25, amount: 43_600, color: "#FF6B8A" },
+      { label: "5-я линия", sublabel: "Partner (20%)", myPercent: 45, theirPercent: 20, amount: 29_550, color: "#A4B5D6" },
+      { label: "Ранговый бонус", sublabel: "за Diamond", myPercent: 0, amount: 5_000, color: "#F7D46D" },
+    ],
   },
 ];
 
@@ -96,11 +123,6 @@ const LEVELS: Level[] = [
 
 function fmt(n: number) {
   return n.toLocaleString("en-US");
-}
-
-function pct(part: number, total: number) {
-  if (total === 0) return 0;
-  return Math.round((part / total) * 100);
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -111,6 +133,7 @@ export function EarningsCalculator() {
   const level = LEVELS[activeIdx];
 
   const maxCheck = LEVELS[LEVELS.length - 1].totalCheck;
+  const maxLineAmount = Math.max(...level.lines.map((l) => l.amount));
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -180,73 +203,95 @@ export function EarningsCalculator() {
             </div>
           </div>
 
-          {/* Income Breakdown */}
+          {/* Income Breakdown by Lines */}
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-text-secondary mb-4 uppercase tracking-wider">
               Откуда берётся доход
             </h3>
 
-            {/* Breakdown bars */}
             <div className="space-y-3">
-              {level.personal > 0 && (
-                <BreakdownRow
-                  label="Личные продажи"
-                  amount={level.personal}
-                  total={level.totalCheck}
-                  color="#8DF9D1"
-                  tooltip={`${level.percent}% от личного оборота`}
-                />
-              )}
-              {level.team > 0 && (
-                <BreakdownRow
-                  label="Доход с команды"
-                  amount={level.team}
-                  total={level.totalCheck}
-                  color="#73D2FF"
-                  tooltip={`Разница % между вашим уровнем (${level.percent}%) и уровнем партнёров`}
-                />
-              )}
-              {level.rankBonus > 0 && (
-                <BreakdownRow
-                  label="Ранговый бонус"
-                  amount={level.rankBonus}
-                  total={level.totalCheck}
-                  color="#F7D46D"
-                  tooltip={`Бонус за достижение уровня ${level.name}`}
-                />
-              )}
+              {level.lines.map((line, i) => {
+                const barWidth = Math.max((line.amount / maxLineAmount) * 100, 3);
+                const diff = line.theirPercent !== undefined ? line.myPercent - line.theirPercent : null;
+
+                return (
+                  <div key={i} className="group">
+                    {/* Line header */}
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: line.color }} />
+                        <span className="text-sm font-medium text-white truncate">{line.label}</span>
+                        {line.sublabel && (
+                          <span className="text-xs text-text-secondary hidden sm:inline">
+                            {line.sublabel}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-sm font-bold text-white flex-shrink-0 ml-2">
+                        ${fmt(line.amount)}
+                      </span>
+                    </div>
+
+                    {/* Difference badge + bar */}
+                    <div className="flex items-center gap-2 ml-4">
+                      {diff !== null && (
+                        <span
+                          className="text-xs font-semibold px-2 py-0.5 rounded flex-shrink-0"
+                          style={{ background: `${line.color}20`, color: line.color }}
+                        >
+                          {level.percent}%−{line.theirPercent}% = {diff}%
+                        </span>
+                      )}
+                      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <div
+                          className="h-full rounded-full transition-all duration-700"
+                          style={{ width: `${barWidth}%`, background: line.color }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Mobile sublabel */}
+                    {line.sublabel && (
+                      <p className="text-xs text-text-secondary ml-4 mt-1 sm:hidden">
+                        {line.sublabel}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Donut-style summary bar */}
-            <div className="mt-5 h-3 rounded-full overflow-hidden flex" style={{ background: "rgba(255,255,255,0.06)" }}>
-              {level.personal > 0 && (
-                <div
-                  className="h-full transition-all duration-700"
-                  style={{ width: `${pct(level.personal, level.totalCheck)}%`, background: "#8DF9D1" }}
-                />
-              )}
-              {level.team > 0 && (
-                <div
-                  className="h-full transition-all duration-700"
-                  style={{ width: `${pct(level.team, level.totalCheck)}%`, background: "#73D2FF" }}
-                />
-              )}
-              {level.rankBonus > 0 && (
-                <div
-                  className="h-full transition-all duration-700"
-                  style={{ width: `${pct(level.rankBonus, level.totalCheck)}%`, background: "#F7D46D" }}
-                />
-              )}
+            {/* Total bar */}
+            <div className="mt-5 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-semibold text-text-secondary">ИТОГО</span>
+                <span className="text-lg font-bold" style={{ color: level.color }}>
+                  ${fmt(level.totalCheck)}
+                </span>
+              </div>
+              <div className="h-3 rounded-full overflow-hidden flex" style={{ background: "rgba(255,255,255,0.06)" }}>
+                {level.lines.map((line, i) => (
+                  <div
+                    key={i}
+                    className="h-full transition-all duration-700 first:rounded-l-full last:rounded-r-full"
+                    style={{
+                      width: `${(line.amount / level.totalCheck) * 100}%`,
+                      background: line.color,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Tooltip example for team income */}
-          {level.team > 0 && activeIdx > 0 && (
+          {/* How it works tooltip */}
+          {activeIdx > 0 && (
             <div className="rounded-2xl p-4 mb-6 text-sm" style={{ background: "rgba(115,210,255,0.08)", border: "1px solid rgba(115,210,255,0.15)" }}>
-              <p className="text-accent-sky font-medium mb-1">Как работает разница %</p>
+              <p className="text-accent-sky font-medium mb-1">Как это работает?</p>
               <p className="text-text-secondary">
-                Вы — {level.name} ({level.percent}%), ваш партнёр — {LEVELS[activeIdx - 1].name} ({LEVELS[activeIdx - 1].percent}%).
-                Разница {level.percent}% − {LEVELS[activeIdx - 1].percent}% = {level.percent - LEVELS[activeIdx - 1].percent}% — это ваш доход с оборота партнёра.
+                Вы — {level.name} ({level.percent}%). С каждой линии вы получаете разницу
+                между вашим процентом и процентом партнёра. Чем глубже линия и чем больше
+                разница — тем выше ваш доход с неё.
               </p>
             </div>
           )}
@@ -265,7 +310,7 @@ export function EarningsCalculator() {
             href="#"
             className="block w-full text-center py-4 rounded-full font-semibold text-black transition-all duration-300"
             style={{
-              background: `linear-gradient(135deg, #8DF9D1, #73D2FF)`,
+              background: "linear-gradient(135deg, #8DF9D1, #73D2FF)",
               boxShadow: "0 15px 45px rgba(115,210,255,0.25)",
             }}
           >
@@ -298,6 +343,7 @@ export function EarningsCalculator() {
                 <div className="flex items-center gap-3 mb-1">
                   <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: l.color }} />
                   <span className="text-sm font-semibold text-white">{l.name}</span>
+                  <span className="text-xs text-text-secondary">{l.percent}%</span>
                   <span className="ml-auto text-sm font-bold" style={{ color: l.color }}>
                     ${fmt(l.totalCheck)}
                   </span>
@@ -325,53 +371,6 @@ export function EarningsCalculator() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-// ─── Breakdown Row ──────────────────────────────────────────────────────────
-
-function BreakdownRow({
-  label,
-  amount,
-  total,
-  color,
-  tooltip,
-}: {
-  label: string;
-  amount: number;
-  total: number;
-  color: string;
-  tooltip: string;
-}) {
-  const [showTip, setShowTip] = useState(false);
-  const percentage = pct(amount, total);
-
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-1">
-        <button
-          className="flex items-center gap-2 text-sm text-text-secondary hover:text-white transition-colors"
-          onClick={() => setShowTip(!showTip)}
-        >
-          <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
-          {label}
-          <span className="text-xs opacity-50">ⓘ</span>
-        </button>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-white">${fmt(amount)}</span>
-          <span className="text-xs text-text-secondary">{percentage}%</span>
-        </div>
-      </div>
-      {showTip && (
-        <p className="text-xs text-text-secondary ml-5 mb-1 pl-0.5">{tooltip}</p>
-      )}
-      <div className="h-1.5 rounded-full overflow-hidden ml-5" style={{ background: "rgba(255,255,255,0.06)" }}>
-        <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{ width: `${percentage}%`, background: color }}
-        />
-      </div>
     </div>
   );
 }
