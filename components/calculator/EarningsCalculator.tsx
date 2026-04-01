@@ -24,6 +24,11 @@ interface Level {
   lines: IncomeLine[];
 }
 
+// Correct differential model: income from each depth = 5% × volume at that depth
+// Each person recruits 4, each buys $1,000 product
+// Ranks: Partner(20%) → Gold(25%) → Sapphire(30%) → Ruby(35%) → Emerald(40%) → Diamond(45%)
+// Differential is always (MY% − 1st-line-leader%) applied to their ENTIRE group volume
+
 const LEVELS: Level[] = [
   {
     name: "Partner",
@@ -31,90 +36,266 @@ const LEVELS: Level[] = [
     gv: 5_000,
     totalCheck: 1_950,
     networkSize: 4,
-    action: "4 регистрации × $1 000 + ББС",
+    action: "4 регистрации + ББС",
     color: "#A4B5D6",
     lines: [
-      { label: "Личные продажи + ББС", sublabel: "4 реги × $1 000", myPercent: 20, amount: 1_950, color: "#8DF9D1" },
+      {
+        label: "ББС (Быстрый Старт)",
+        sublabel: "200+200+200+250+100+1000",
+        myPercent: 20,
+        amount: 1_950,
+        color: "#8DF9D1",
+      },
     ],
   },
   {
     name: "Gold",
     percent: 25,
-    gv: 17_000,
+    gv: 21_000,
     totalCheck: 1_100,
-    networkSize: 16,
-    action: "1-я линия по 4 регистрации",
+    networkSize: 20,
+    action: "3 Partner (PPP) в 1-й линии",
     color: "#F7D46D",
     lines: [
-      { label: "Личные продажи", sublabel: "25% от оборота", myPercent: 25, amount: 250, color: "#8DF9D1" },
-      { label: "1-я линия", sublabel: "Partner (20%)", myPercent: 25, theirPercent: 20, amount: 750, color: "#73D2FF" },
-      { label: "Ранговый бонус", sublabel: "за Gold", myPercent: 0, amount: 100, color: "#F7D46D" },
+      {
+        label: "1-я линия",
+        sublabel: "4 Partner (20%)",
+        myPercent: 25,
+        theirPercent: 20,
+        amount: 200,
+        color: "#73D2FF",
+      },
+      {
+        label: "2-я линия",
+        sublabel: "16 новых",
+        myPercent: 25,
+        theirPercent: 20,
+        amount: 800,
+        color: "#8DA0FF",
+      },
+      {
+        label: "Ранговый бонус",
+        sublabel: "за Gold",
+        myPercent: 0,
+        amount: 100,
+        color: "#F7D46D",
+      },
     ],
   },
   {
     name: "Sapphire",
     percent: 30,
-    gv: 53_000,
-    totalCheck: 6_400,
-    networkSize: 64,
-    action: "2-я линия по 4 регистрации",
+    gv: 85_000,
+    totalCheck: 4_700,
+    networkSize: 84,
+    action: "3 Gold (GGG) в 1-й линии",
     color: "#73D2FF",
     lines: [
-      { label: "Личные продажи", sublabel: "30% от оборота", myPercent: 30, amount: 300, color: "#8DF9D1" },
-      { label: "1-я линия", sublabel: "Gold (25%)", myPercent: 30, theirPercent: 25, amount: 2_100, color: "#73D2FF" },
-      { label: "2-я линия", sublabel: "Partner (20%)", myPercent: 30, theirPercent: 20, amount: 3_500, color: "#8DA0FF" },
-      { label: "Ранговый бонус", sublabel: "за Sapphire", myPercent: 0, amount: 500, color: "#F7D46D" },
+      {
+        label: "1-я линия",
+        sublabel: "4 Gold (25%)",
+        myPercent: 30,
+        theirPercent: 25,
+        amount: 200,
+        color: "#73D2FF",
+      },
+      {
+        label: "2-я линия",
+        sublabel: "16 Partner",
+        myPercent: 30,
+        theirPercent: 25,
+        amount: 800,
+        color: "#8DA0FF",
+      },
+      {
+        label: "3-я линия",
+        sublabel: "64 новых",
+        myPercent: 30,
+        theirPercent: 25,
+        amount: 3_200,
+        color: "#C4A0FF",
+      },
+      {
+        label: "Ранговый бонус",
+        sublabel: "за Sapphire",
+        myPercent: 0,
+        amount: 500,
+        color: "#F7D46D",
+      },
     ],
   },
   {
     name: "Ruby",
     percent: 35,
-    gv: 161_000,
-    totalCheck: 18_700,
-    networkSize: 256,
-    action: "3-я линия по 4 регистрации",
+    gv: 341_000,
+    totalCheck: 18_000,
+    networkSize: 340,
+    action: "3 Sapphire (SSS) в 1-й линии",
     color: "#FF6B8A",
     lines: [
-      { label: "Личные продажи", sublabel: "35% от оборота", myPercent: 35, amount: 350, color: "#8DF9D1" },
-      { label: "1-я линия", sublabel: "Sapphire (30%)", myPercent: 35, theirPercent: 30, amount: 3_200, color: "#73D2FF" },
-      { label: "2-я линия", sublabel: "Gold (25%)", myPercent: 35, theirPercent: 25, amount: 6_400, color: "#8DA0FF" },
-      { label: "3-я линия", sublabel: "Partner (20%)", myPercent: 35, theirPercent: 20, amount: 7_750, color: "#C4A0FF" },
-      { label: "Ранговый бонус", sublabel: "за Ruby", myPercent: 0, amount: 1_000, color: "#F7D46D" },
+      {
+        label: "1-я линия",
+        sublabel: "4 Sapphire (30%)",
+        myPercent: 35,
+        theirPercent: 30,
+        amount: 200,
+        color: "#73D2FF",
+      },
+      {
+        label: "2-я линия",
+        sublabel: "16 Gold",
+        myPercent: 35,
+        theirPercent: 30,
+        amount: 800,
+        color: "#8DA0FF",
+      },
+      {
+        label: "3-я линия",
+        sublabel: "64 Partner",
+        myPercent: 35,
+        theirPercent: 30,
+        amount: 3_200,
+        color: "#C4A0FF",
+      },
+      {
+        label: "4-я линия",
+        sublabel: "256 новых",
+        myPercent: 35,
+        theirPercent: 30,
+        amount: 12_800,
+        color: "#FF6B8A",
+      },
+      {
+        label: "Ранговый бонус",
+        sublabel: "за Ruby",
+        myPercent: 0,
+        amount: 1_000,
+        color: "#F7D46D",
+      },
     ],
   },
   {
     name: "Emerald",
     percent: 40,
-    gv: 485_000,
-    totalCheck: 53_600,
-    networkSize: 1_024,
-    action: "4-я линия по 4 регистрации",
+    gv: 1_365_000,
+    totalCheck: 70_700,
+    networkSize: 1_364,
+    action: "3 Ruby (RRR) в 1-й линии",
     color: "#8DF9D1",
     lines: [
-      { label: "Личные продажи", sublabel: "40% от оборота", myPercent: 40, amount: 400, color: "#8DF9D1" },
-      { label: "1-я линия", sublabel: "Ruby (35%)", myPercent: 40, theirPercent: 35, amount: 7_200, color: "#73D2FF" },
-      { label: "2-я линия", sublabel: "Sapphire (30%)", myPercent: 40, theirPercent: 30, amount: 14_200, color: "#8DA0FF" },
-      { label: "3-я линия", sublabel: "Gold (25%)", myPercent: 40, theirPercent: 25, amount: 16_100, color: "#C4A0FF" },
-      { label: "4-я линия", sublabel: "Partner (20%)", myPercent: 40, theirPercent: 20, amount: 13_200, color: "#FF6B8A" },
-      { label: "Ранговый бонус", sublabel: "за Emerald", myPercent: 0, amount: 2_500, color: "#F7D46D" },
+      {
+        label: "1-я линия",
+        sublabel: "4 Ruby (35%)",
+        myPercent: 40,
+        theirPercent: 35,
+        amount: 200,
+        color: "#73D2FF",
+      },
+      {
+        label: "2-я линия",
+        sublabel: "16 Sapphire",
+        myPercent: 40,
+        theirPercent: 35,
+        amount: 800,
+        color: "#8DA0FF",
+      },
+      {
+        label: "3-я линия",
+        sublabel: "64 Gold",
+        myPercent: 40,
+        theirPercent: 35,
+        amount: 3_200,
+        color: "#C4A0FF",
+      },
+      {
+        label: "4-я линия",
+        sublabel: "256 Partner",
+        myPercent: 40,
+        theirPercent: 35,
+        amount: 12_800,
+        color: "#FF6B8A",
+      },
+      {
+        label: "5-я линия",
+        sublabel: "1,024 новых",
+        myPercent: 40,
+        theirPercent: 35,
+        amount: 51_200,
+        color: "#A4B5D6",
+      },
+      {
+        label: "Ранговый бонус",
+        sublabel: "за Emerald",
+        myPercent: 0,
+        amount: 2_500,
+        color: "#F7D46D",
+      },
     ],
   },
   {
     name: "Diamond",
     percent: 45,
-    gv: 1_457_000,
-    totalCheck: 204_400,
-    networkSize: 4_096,
-    action: "5-я линия по 4 регистрации",
+    gv: 5_461_000,
+    totalCheck: 278_000,
+    networkSize: 5_460,
+    action: "3 Emerald (EEE) в 1-й линии",
     color: "#B8F2FF",
     lines: [
-      { label: "Личные продажи", sublabel: "45% от оборота", myPercent: 45, amount: 450, color: "#8DF9D1" },
-      { label: "1-я линия", sublabel: "Emerald (40%)", myPercent: 45, theirPercent: 40, amount: 24_200, color: "#73D2FF" },
-      { label: "2-я линия", sublabel: "Ruby (35%)", myPercent: 45, theirPercent: 35, amount: 48_800, color: "#8DA0FF" },
-      { label: "3-я линия", sublabel: "Sapphire (30%)", myPercent: 45, theirPercent: 30, amount: 52_800, color: "#C4A0FF" },
-      { label: "4-я линия", sublabel: "Gold (25%)", myPercent: 45, theirPercent: 25, amount: 43_600, color: "#FF6B8A" },
-      { label: "5-я линия", sublabel: "Partner (20%)", myPercent: 45, theirPercent: 20, amount: 29_550, color: "#A4B5D6" },
-      { label: "Ранговый бонус", sublabel: "за Diamond", myPercent: 0, amount: 5_000, color: "#F7D46D" },
+      {
+        label: "1-я линия",
+        sublabel: "4 Emerald (40%)",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 200,
+        color: "#73D2FF",
+      },
+      {
+        label: "2-я линия",
+        sublabel: "16 Ruby",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 800,
+        color: "#8DA0FF",
+      },
+      {
+        label: "3-я линия",
+        sublabel: "64 Sapphire",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 3_200,
+        color: "#C4A0FF",
+      },
+      {
+        label: "4-я линия",
+        sublabel: "256 Gold",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 12_800,
+        color: "#FF6B8A",
+      },
+      {
+        label: "5-я линия",
+        sublabel: "1,024 Partner",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 51_200,
+        color: "#A4B5D6",
+      },
+      {
+        label: "6-я линия",
+        sublabel: "4,096 новых",
+        myPercent: 45,
+        theirPercent: 40,
+        amount: 204_800,
+        color: "#B8F2FF",
+      },
+      {
+        label: "Ранговый бонус",
+        sublabel: "за Diamond",
+        myPercent: 0,
+        amount: 5_000,
+        color: "#F7D46D",
+      },
     ],
   },
 ];
@@ -142,12 +323,23 @@ export function EarningsCalculator() {
         {LEVELS.map((l, i) => (
           <button
             key={l.name}
-            onClick={() => { setActiveIdx(i); setShowCompare(false); }}
+            onClick={() => {
+              setActiveIdx(i);
+              setShowCompare(false);
+            }}
             className="flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-300"
             style={
               i === activeIdx
-                ? { background: l.color, color: "#0B1324", boxShadow: `0 0 20px ${l.color}40` }
-                : { background: "rgba(255,255,255,0.06)", color: "#A4B5D6", border: "1px solid rgba(255,255,255,0.1)" }
+                ? {
+                    background: l.color,
+                    color: "#0B1324",
+                    boxShadow: `0 0 20px ${l.color}40`,
+                  }
+                : {
+                    background: "rgba(255,255,255,0.06)",
+                    color: "#A4B5D6",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                  }
             }
           >
             {l.name}
@@ -168,19 +360,33 @@ export function EarningsCalculator() {
           <div className="flex items-center gap-3 mb-6">
             <div
               className="w-4 h-4 rounded-full"
-              style={{ background: level.color, boxShadow: `0 0 12px ${level.color}80` }}
+              style={{
+                background: level.color,
+                boxShadow: `0 0 12px ${level.color}80`,
+              }}
             />
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ color: level.color }}>
+            <h2
+              className="text-2xl md:text-3xl font-bold"
+              style={{ color: level.color }}
+            >
               {level.name}
             </h2>
-            <span className="ml-auto text-sm font-medium px-3 py-1 rounded-full" style={{ background: `${level.color}20`, color: level.color }}>
+            <span
+              className="ml-auto text-sm font-medium px-3 py-1 rounded-full"
+              style={{
+                background: `${level.color}20`,
+                color: level.color,
+              }}
+            >
               {level.percent}%
             </span>
           </div>
 
           {/* Total Check */}
           <div className="text-center mb-8">
-            <p className="text-text-secondary text-sm mb-1">Ваш месячный доход</p>
+            <p className="text-text-secondary text-sm mb-1">
+              Ваш месячный доход
+            </p>
             <p className="text-5xl md:text-6xl font-bold text-white">
               ${fmt(level.totalCheck)}
             </p>
@@ -188,18 +394,31 @@ export function EarningsCalculator() {
 
           {/* Key Metrics */}
           <div className="grid grid-cols-3 gap-3 mb-8">
-            <div className="rounded-2xl p-4 text-center" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
               <p className="text-xs text-text-secondary mb-1">GV</p>
               <p className="text-lg font-bold text-white">${fmt(level.gv)}</p>
             </div>
-            <div className="rounded-2xl p-4 text-center" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
               <p className="text-xs text-text-secondary mb-1">Сеть</p>
-              <p className="text-lg font-bold text-white">{fmt(level.networkSize)}</p>
+              <p className="text-lg font-bold text-white">
+                {fmt(level.networkSize)}
+              </p>
               <p className="text-xs text-text-secondary">чел.</p>
             </div>
-            <div className="rounded-2xl p-4 text-center" style={{ background: "rgba(255,255,255,0.04)" }}>
-              <p className="text-xs text-text-secondary mb-1">Действие</p>
-              <p className="text-xs font-medium text-white leading-tight">{level.action}</p>
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
+              <p className="text-xs text-text-secondary mb-1">Требование</p>
+              <p className="text-xs font-medium text-white leading-tight">
+                {level.action}
+              </p>
             </div>
           </div>
 
@@ -211,16 +430,27 @@ export function EarningsCalculator() {
 
             <div className="space-y-3">
               {level.lines.map((line, i) => {
-                const barWidth = Math.max((line.amount / maxLineAmount) * 100, 3);
-                const diff = line.theirPercent !== undefined ? line.myPercent - line.theirPercent : null;
+                const barWidth = Math.max(
+                  (line.amount / maxLineAmount) * 100,
+                  3
+                );
+                const diff =
+                  line.theirPercent !== undefined
+                    ? line.myPercent - line.theirPercent
+                    : null;
 
                 return (
                   <div key={i} className="group">
                     {/* Line header */}
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: line.color }} />
-                        <span className="text-sm font-medium text-white truncate">{line.label}</span>
+                        <div
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ background: line.color }}
+                        />
+                        <span className="text-sm font-medium text-white truncate">
+                          {line.label}
+                        </span>
                         {line.sublabel && (
                           <span className="text-xs text-text-secondary hidden sm:inline">
                             {line.sublabel}
@@ -237,12 +467,18 @@ export function EarningsCalculator() {
                       {diff !== null && (
                         <span
                           className="text-xs font-semibold px-2 py-0.5 rounded flex-shrink-0"
-                          style={{ background: `${line.color}20`, color: line.color }}
+                          style={{
+                            background: `${line.color}20`,
+                            color: line.color,
+                          }}
                         >
                           {level.percent}%−{line.theirPercent}% = {diff}%
                         </span>
                       )}
-                      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                      <div
+                        className="flex-1 h-2 rounded-full overflow-hidden"
+                        style={{ background: "rgba(255,255,255,0.06)" }}
+                      >
                         <div
                           className="h-full rounded-full transition-all duration-700"
                           style={{ width: `${barWidth}%`, background: line.color }}
@@ -262,14 +498,25 @@ export function EarningsCalculator() {
             </div>
 
             {/* Total bar */}
-            <div className="mt-5 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+            <div
+              className="mt-5 pt-4"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+            >
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-semibold text-text-secondary">ИТОГО</span>
-                <span className="text-lg font-bold" style={{ color: level.color }}>
+                <span className="text-sm font-semibold text-text-secondary">
+                  ИТОГО
+                </span>
+                <span
+                  className="text-lg font-bold"
+                  style={{ color: level.color }}
+                >
                   ${fmt(level.totalCheck)}
                 </span>
               </div>
-              <div className="h-3 rounded-full overflow-hidden flex" style={{ background: "rgba(255,255,255,0.06)" }}>
+              <div
+                className="h-3 rounded-full overflow-hidden flex"
+                style={{ background: "rgba(255,255,255,0.06)" }}
+              >
                 {level.lines.map((line, i) => (
                   <div
                     key={i}
@@ -286,12 +533,23 @@ export function EarningsCalculator() {
 
           {/* How it works tooltip */}
           {activeIdx > 0 && (
-            <div className="rounded-2xl p-4 mb-6 text-sm" style={{ background: "rgba(115,210,255,0.08)", border: "1px solid rgba(115,210,255,0.15)" }}>
-              <p className="text-accent-sky font-medium mb-1">Как это работает?</p>
+            <div
+              className="rounded-2xl p-4 mb-6 text-sm"
+              style={{
+                background: "rgba(115,210,255,0.08)",
+                border: "1px solid rgba(115,210,255,0.15)",
+              }}
+            >
+              <p className="text-accent-sky font-medium mb-1">
+                Как это работает?
+              </p>
               <p className="text-text-secondary">
-                Вы — {level.name} ({level.percent}%). С каждой линии вы получаете разницу
-                между вашим процентом и процентом партнёра. Чем глубже линия и чем больше
-                разница — тем выше ваш доход с неё.
+                Вы — {level.name} ({level.percent}%). Ваш доход — это разница
+                между вашим процентом и процентом лидера 1-й линии, умноженная на
+                весь групповой объём. Разница {level.percent}%−
+                {level.percent - 5}% = 5% одинакова для всех линий, но на каждой
+                следующей линии в 4 раза больше людей — поэтому доход растёт
+                экспоненциально.
               </p>
             </div>
           )}
@@ -300,7 +558,11 @@ export function EarningsCalculator() {
           <button
             onClick={() => setShowCompare(true)}
             className="w-full py-3 rounded-full text-sm font-semibold transition-all duration-300 mb-4"
-            style={{ background: "rgba(255,255,255,0.06)", color: "#A4B5D6", border: "1px solid rgba(255,255,255,0.1)" }}
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              color: "#A4B5D6",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
           >
             Сравнить все уровни
           </button>
@@ -321,10 +583,15 @@ export function EarningsCalculator() {
         /* Compare View */
         <div
           className="rounded-3xl p-6 md:p-8"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.1)",
+          }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-white">Сравнение уровней</h3>
+            <h3 className="text-lg font-bold text-white">
+              Сравнение уровней
+            </h3>
             <button
               onClick={() => setShowCompare(false)}
               className="text-sm text-text-secondary hover:text-white transition-colors"
@@ -337,22 +604,41 @@ export function EarningsCalculator() {
             {LEVELS.map((l, i) => (
               <button
                 key={l.name}
-                onClick={() => { setActiveIdx(i); setShowCompare(false); }}
+                onClick={() => {
+                  setActiveIdx(i);
+                  setShowCompare(false);
+                }}
                 className="w-full text-left"
               >
                 <div className="flex items-center gap-3 mb-1">
-                  <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: l.color }} />
-                  <span className="text-sm font-semibold text-white">{l.name}</span>
-                  <span className="text-xs text-text-secondary">{l.percent}%</span>
-                  <span className="ml-auto text-sm font-bold" style={{ color: l.color }}>
+                  <div
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ background: l.color }}
+                  />
+                  <span className="text-sm font-semibold text-white">
+                    {l.name}
+                  </span>
+                  <span className="text-xs text-text-secondary">
+                    {l.percent}%
+                  </span>
+                  <span
+                    className="ml-auto text-sm font-bold"
+                    style={{ color: l.color }}
+                  >
                     ${fmt(l.totalCheck)}
                   </span>
                 </div>
-                <div className="ml-6 h-2.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div
+                  className="ml-6 h-2.5 rounded-full overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.06)" }}
+                >
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
-                      width: `${Math.max((l.totalCheck / maxCheck) * 100, 1)}%`,
+                      width: `${Math.max(
+                        (l.totalCheck / maxCheck) * 100,
+                        1
+                      )}%`,
                       background: `linear-gradient(90deg, ${l.color}, ${l.color}80)`,
                     }}
                   />
@@ -361,11 +647,20 @@ export function EarningsCalculator() {
             ))}
           </div>
 
-          <div className="mt-6 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div
+            className="mt-6 pt-4"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+          >
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary">От Partner до Diamond</span>
+              <span className="text-text-secondary">
+                От Partner до Diamond
+              </span>
               <span className="font-bold" style={{ color: "#F7D46D" }}>
-                ×{Math.round(LEVELS[LEVELS.length - 1].totalCheck / LEVELS[0].totalCheck)} рост дохода
+                ×
+                {Math.round(
+                  LEVELS[LEVELS.length - 1].totalCheck / LEVELS[0].totalCheck
+                )}{" "}
+                рост дохода
               </span>
             </div>
           </div>
